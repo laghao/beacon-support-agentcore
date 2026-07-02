@@ -1,0 +1,185 @@
+# Beacon eval suite. Each task runs against the coordinator (or, for R4, a
+# specialist directly — see run.py's docstring for why) and grades the result.
+#
+# Run:  uv run python evals/run.py                  (multiagent=True, the shipped default)
+#       uv run python evals/run.py --single-agent    (multiagent=False)
+#       uv run python evals/run.py --compare         (both, side by side)
+#
+# Order IDs / customer emails here match seed/orders.json + seed/customers.json
+# as of this writing (NW-10042, NW-10133, NW-10110, NW-10126, NW-10102, NW-10095,
+# jane.doe@gmail.com, etc.) and are dated against "today" = 2026-07-01 in that
+# seed set. If a teammate's seed data changes order IDs, delivery dates, or the
+# customer roster, these prompts (and R2's expected refund amount) need a
+# matching update — they're not fetched dynamically from seed/orders.json on
+# purpose, so a broken seed shows up as a real eval regression, not a silent
+# self-fulfilling read of the same file the agent reads.
+#
+# Fields:
+#   mode      "coordinator" (default) — build_coordinator(multiagent=...), or
+#             "specialist" — build a specialist directly, bypassing the
+#             coordinator's dispatch_specialists tool entirely (see run.py).
+#   domain    required when mode: specialist. One of billing/shipping/returns.
+#   requires  optional list of ["gateway"] and/or ["memory"] — SKIP (not FAIL)
+#             this task when that piece of AWS infra isn't deployed yet
+#             (GATEWAY_BEACONGATEWAY_URL / MEMORY_BEACONMEMORY_ID unset).
+#   special   "memory_recall" — R5 only; handled by its own function in run.py
+#             instead of the standard grade-a-single-agent-call path, because
+#             it checks a raw AgentCore Memory retrieval, not an agent's trace.
+#
+# Graders (see graders.py):
+#   tool_called       — a named tool (or any_of a list) appears in the run's
+#                       tool-call trace. Traced at the strands tool-decorator /
+#                       MCPClient level (see run.py's _install_tool_tracing),
+#                       so this sees tool calls made by a specialist spawned
+#                       inside dispatch_specialists too, not just the
+#                       coordinator's own direct tool calls.
+#   state_flag        — result.agent.state[key] is truthy after the run.
+#   regex_present     — a pattern matches the agent's final text.
+#   numeric_tolerance — parse a named tool's JSON output, check a field is
+#                       within ±tolerance of an expected value. Degrades to a
+#                       PASS-on-call-presence check if the tool's own sandbox
+#                       (Code Interpreter/Browser) was unreachable and it
+#                       returned an AGENTCORE_ERROR string instead of raising.
+#   composite         — AND a list of sub-grader checks.
+
+tasks:
+  - id: R1
+    name: Simple order status lookup
+    mode: coordinator
+    actor_id: marcus.reyes@gmail.com
+    requires: [gateway]
+    prompt: >
+      Hi, can you check the status of order NW-10042 for me?
+    grader: tool_called
+    expect:
+      any_of: [get_order_status, get_order_details]
+    notes: >
+      Single-domain, no specialist reasoning needed — the coordinator's system
+      prompt says to handle exactly this kind of lookup itself with the
+      Gateway order tool, not dispatch_specialists. Requires BeaconGateway
+      deployed (order data lives in DynamoDB behind it); SKIPs otherwise
+      rather than failing on missing infra.
+
+  - id: R2
+    name: Refund eligibility math (with restocking fee)
+    mode: coordinator
+    actor_id: hannah.summers@icloud.com
+    prompt: >
+      Order NW-10133 was delivered on 2026-06-06 (today is 2026-07-01).
+      I want to return the Women's Trail Running Shoes, which were $110 of
+      the $132 order total. What refund would I get, including any
+      restocking fee?
+    grader: numeric_tolerance
+    expect:
+      tool: calculate_refund
+      field: refund_amount_usd
+      value: 93.50
+      tolerance: 5.0
+    notes: >
+      25 days since delivery: inside the 30-day window (eligible) but past
+      the 14-day no-fee cutoff, so the 15% restocking fee applies —
+      110 - 16.50 = 93.50. Expects the coordinator to dispatch to
+      billing/returns rather than do the arithmetic itself (refund-policy.md:
+      "never compute a refund by hand"). Grader degrades gracefully to a
+      call-presence check if Code Interpreter isn't reachable in this
+      environment — see graders.numeric_tolerance's docstring.
+
+  - id: R3
+    name: Carrier delay lookup (live Browser tool)
+    mode: coordinator
+    actor_id: tyler.brooks@gmail.com
+    prompt: >
+      My order NW-10110 hasn't updated since June 30 and it's shipping via
+      USPS — is there a service disruption I should know about?
+    grader: tool_called
+    expect:
+      tool: check_carrier_service_alerts
+    notes: >
+      Hits a real public USPS page via the AgentCore Browser tool + real AWS.
+      We can't control what that page says on any given day, so this grades
+      leniently on the tool having been called at all, not on its content.
+
+  - id: R4
+    name: Escalation trigger (fraud + legal language)
+    mode: specialist
+    domain: billing
+    actor_id: priya.natarajan@gmail.com
+    prompt: >
+      Order NW-10126 shows as cancelled in your system but I was still
+      charged $210 for it. I never authorized this charge — it looks like
+      fraud, and I'm filing a chargeback with my bank if this isn't resolved
+      today.
+    grader: state_flag
+    expect:
+      key: escalation
+    notes: >
+      Invokes the Billing specialist directly instead of going through the
+      coordinator's dispatch_specialists. Two reasons: (1) dispatch_specialists
+      runs a specialist as its own Agent instance, so escalate_to_human's
+      agent.state.set(...) lands on that specialist's state, not the
+      coordinator's — the coordinator object we'd otherwise check never sees
+      it. (2) Even if we escalated at the coordinator instead, the
+      coordinator's own EscalationSummaryHooks clears agent.state["escalation"]
+      back to None in its AfterInvocationEvent handler (hooks/summary_hook.py)
+      before control returns to this harness — so checking the coordinator's
+      state right after the call would show None even on a real escalation.
+      Calling the specialist directly sidesteps both issues and is the
+      simpler of the two options the task brief allows for.
+
+  - id: R5
+    name: Memory recall of a seeded preference
+    special: memory_recall
+    actor_id: jane.doe@gmail.com
+    requires: [memory]
+    prompt: >
+      Quick one — what's the latest on my orders? Keep it brief if you can.
+    grader: null  # handled by run.py's run_memory_recall_task, not graders.grade
+    expect:
+      namespace: preferences
+      query: "communication style preference"
+      must_contain: concise
+    notes: >
+      seed/memory_priors.md pre-loads a USER_PREFERENCE record for
+      jane.doe@gmail.com ("prefers concise answers") via bin/setup_backend.py,
+      *if* BeaconMemory was deployed before that script ran. SKIPs (not FAILs)
+      when MEMORY_BEACONMEMORY_ID is unset. Grades on a direct
+      MemoryClient.retrieve_memories() call against the preferences namespace
+      rather than on whether the LLM's prose "sounds concise" — that's a much
+      less deterministic signal, and this task is really testing the
+      retrieval plumbing, not the model's writing style. Also runs one
+      coordinator turn for a wall-time-comparable row in the scorecard, but
+      that turn's phrasing isn't what gates PASS/FAIL. Note this is inherently
+      a little flaky: AgentCore Memory's extraction from the seed event can lag
+      behind `bin/setup_backend.py` finishing, independent of anything in this
+      harness.
+
+  - id: X1
+    name: Cross-domain parallel dispatch (shipping + returns)
+    mode: coordinator
+    actor_id: sarah.mitchell@outlook.com
+    prompt: >
+      Two things: my order NW-10102 (the Alpine Ridge tent) was supposed to
+      arrive by June 25 and it's still in transit as of today, July 1 — can
+      you check whether there's a UPS delay in my area? Separately, I'd like
+      to return the boots from order NW-10095 since they didn't fit — what
+      would my refund be?
+    grader: composite
+    expect:
+      checks:
+        - grader: tool_called
+          tool: check_carrier_service_alerts
+        - grader: tool_called
+          any_of: [calculate_refund, check_return_eligibility]
+    notes: >
+      The one task in this suite where multiagent=True and multiagent=False
+      are expected to *differ* — but read run.py's module docstring before
+      assuming that difference is "single-agent gets it wrong". It doesn't:
+      dispatch_specialists exists as a tool in both modes (see
+      agents/coordinator.py), so this composite check is expected to PASS
+      either way. The honest difference is wall-clock time (multiagent=True
+      runs shipping + returns concurrently via asyncio.gather; multiagent=False
+      awaits them one at a time in the same tool call) and, when BeaconMemory
+      is deployed, whether each specialist's turn lands on its own isolated,
+      auditable memory branch (multiagent=True) or nowhere (multiagent=False,
+      branch stays None — see coordinator.py's _run_specialist). --compare
+      calls this out explicitly rather than scoring it as a correctness win.

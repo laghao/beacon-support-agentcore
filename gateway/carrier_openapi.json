@@ -1,0 +1,87 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Northwind Carrier Status API",
+    "description": "Mock shipping-carrier REST API. Gateway auto-derives MCP tools from this schema (row 11 of the Beacon capability table) — no hand-written tool code.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "https://carrier-status.example.com/v1" }
+  ],
+  "paths": {
+    "/shipments/{tracking_number}": {
+      "get": {
+        "operationId": "getShipmentStatus",
+        "summary": "Get the live tracking status for one shipment.",
+        "parameters": [
+          {
+            "name": "tracking_number",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shipment status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tracking_number": { "type": "string" },
+                    "carrier": { "type": "string" },
+                    "status": { "type": "string" },
+                    "last_scan_location": { "type": "string" },
+                    "last_scan_at": { "type": "string", "format": "date-time" },
+                    "estimated_delivery": { "type": "string", "format": "date" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/carriers/{carrier}/delays": {
+      "get": {
+        "operationId": "getCarrierDelays",
+        "summary": "Check whether a carrier has a known service delay in a region.",
+        "parameters": [
+          {
+            "name": "carrier",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "enum": ["ups", "usps", "fedex", "ontrac"] }
+          },
+          {
+            "name": "region",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "description": "US state code, e.g. CA" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delay status for the carrier/region pair",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "carrier": { "type": "string" },
+                    "region": { "type": "string" },
+                    "delayed": { "type": "boolean" },
+                    "delay_days": { "type": "integer" },
+                    "reason": { "type": "string" },
+                    "updated_at": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

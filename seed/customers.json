@@ -1,0 +1,62 @@
+[
+  {
+    "email": "jane.doe@gmail.com",
+    "name": "Jane Doe",
+    "location": "Denver, CO",
+    "notes": "Prefers concise answers — see skills/tone-guide.md. Filed a complaint (ticket TCK-3001) after order NW-10034 took 17 days to arrive via UPS in March 2026; given $15 store credit. Worth pre-loading into BeaconMemory (see seed/memory_priors.md)."
+  },
+  {
+    "email": "marcus.reyes@gmail.com",
+    "name": "Marcus Reyes",
+    "location": "Austin, TX",
+    "notes": "Received a defective camp stove on order NW-10058 (ticket TCK-3002), refunded in full plus a free replacement. Has a short patience budget on ambiguous follow-ups since — see tone-guide.md's 'prior complaint history' branch. Worth pre-loading into BeaconMemory (see seed/memory_priors.md)."
+  },
+  {
+    "email": "emily.chen@yahoo.com",
+    "name": "Emily Chen",
+    "location": "Seattle, WA",
+    "notes": ""
+  },
+  {
+    "email": "david.okafor@gmail.com",
+    "name": "David Okafor",
+    "location": "Chicago, IL",
+    "notes": ""
+  },
+  {
+    "email": "sarah.mitchell@outlook.com",
+    "name": "Sarah Mitchell",
+    "location": "Denver, CO",
+    "notes": "Received the wrong boot size on order NW-10095 (ticket TCK-3014), resolved with a prepaid return label and correct-size replacement."
+  },
+  {
+    "email": "tyler.brooks@gmail.com",
+    "name": "Tyler Brooks",
+    "location": "Portland, OR",
+    "notes": ""
+  },
+  {
+    "email": "priya.natarajan@gmail.com",
+    "name": "Priya Natarajan",
+    "location": "San Francisco, CA",
+    "notes": ""
+  },
+  {
+    "email": "hannah.summers@icloud.com",
+    "name": "Hannah Summers",
+    "location": "Boulder, CO",
+    "notes": "Asked about the restocking fee on a return made ~3 weeks post-delivery (ticket TCK-3022); accepted the 15% fee and proceeded."
+  },
+  {
+    "email": "carlos.mendez@gmail.com",
+    "name": "Carlos Mendez",
+    "location": "Miami, FL",
+    "notes": ""
+  },
+  {
+    "email": "olivia.park@gmail.com",
+    "name": "Olivia Park",
+    "location": "Salt Lake City, UT",
+    "notes": ""
+  }
+]

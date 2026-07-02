@@ -1,0 +1,23 @@
+[
+  {
+    "carrier": "ups",
+    "region": "CO",
+    "delay_days": 3,
+    "reason": "Severe early-summer snowstorm across the Front Range disrupting ground network and regional hubs.",
+    "active": true
+  },
+  {
+    "carrier": "fedex",
+    "region": "FL",
+    "delay_days": 2,
+    "reason": "Tropical storm flooding at the Miami regional sorting facility.",
+    "active": true
+  },
+  {
+    "carrier": "usps",
+    "region": "CA",
+    "delay_days": 1,
+    "reason": "Wildfire smoke closures affecting Northern California delivery routes; since resolved.",
+    "active": false
+  }
+]

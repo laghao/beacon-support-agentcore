@@ -1,0 +1,37 @@
+[
+  {
+    "ticket_id": "TCK-3001",
+    "customer_email": "jane.doe@gmail.com",
+    "subject": "Delivery took 17 days on order NW-10034",
+    "resolution": "Apologized for the delay, confirmed it was a UPS ground-transit exception rather than a lost package, and issued $15 store credit; customer accepted.",
+    "date": "2026-03-20"
+  },
+  {
+    "ticket_id": "TCK-3002",
+    "customer_email": "marcus.reyes@gmail.com",
+    "subject": "Camp stove arrived with a cracked burner (NW-10058)",
+    "resolution": "Confirmed defective item, issued a full refund, and shipped a free replacement unit with expedited shipping.",
+    "date": "2026-05-04"
+  },
+  {
+    "ticket_id": "TCK-3014",
+    "customer_email": "sarah.mitchell@outlook.com",
+    "subject": "Wrong boot size shipped on NW-10095",
+    "resolution": "Verified the wrong item was shipped, sent a prepaid return label, and shipped the correct size at no additional charge.",
+    "date": "2026-05-25"
+  },
+  {
+    "ticket_id": "TCK-3022",
+    "customer_email": "hannah.summers@icloud.com",
+    "subject": "Question about restocking fee on a 3-week-old return",
+    "resolution": "Explained the 15% restocking fee that applies to returns made 15-30 days after delivery per refund-policy.md; customer proceeded with the return.",
+    "date": "2026-06-09"
+  },
+  {
+    "ticket_id": "TCK-3030",
+    "customer_email": "priya.natarajan@gmail.com",
+    "subject": "Requested cancellation of order NW-10126 before it shipped",
+    "resolution": "Cancelled the order prior to fulfillment and confirmed no charge would be made to the customer's card.",
+    "date": "2026-06-16"
+  }
+]

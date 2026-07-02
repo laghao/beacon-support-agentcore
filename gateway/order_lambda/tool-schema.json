@@ -1,0 +1,107 @@
+[
+  {
+    "name": "get_order_status",
+    "description": "Look up the current shipping status, carrier, and tracking number for one order.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "order_id": { "type": "string", "description": "Order id, e.g. NW-10042" }
+      },
+      "required": ["order_id"]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "order_id": { "type": "string" },
+        "status": { "type": "string" },
+        "carrier": { "type": "string" },
+        "tracking_number": { "type": "string" },
+        "estimated_delivery": { "type": "string" },
+        "last_update": { "type": "string" }
+      }
+    }
+  },
+  {
+    "name": "get_order_details",
+    "description": "Get the line items, order date, total, and shipping address for one order.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "order_id": { "type": "string", "description": "Order id, e.g. NW-10042" }
+      },
+      "required": ["order_id"]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "order_id": { "type": "string" },
+        "customer_email": { "type": "string" },
+        "order_date": { "type": "string" },
+        "total_usd": { "type": "number" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sku": { "type": "string" },
+              "name": { "type": "string" },
+              "quantity": { "type": "integer" },
+              "unit_price_usd": { "type": "number" }
+            }
+          }
+        },
+        "shipping_address": { "type": "string" }
+      }
+    }
+  },
+  {
+    "name": "check_return_eligibility",
+    "description": "Check whether an order (or one item on it) is still inside the return window, per Northwind Outfitters' 30-day policy.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "order_id": { "type": "string" },
+        "item_sku": { "type": "string", "description": "Optional. Restrict the check to one line item." }
+      },
+      "required": ["order_id"]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "order_id": { "type": "string" },
+        "eligible": { "type": "boolean" },
+        "reason": { "type": "string" },
+        "return_window_closes_on": { "type": "string" },
+        "days_remaining": { "type": "integer" }
+      }
+    }
+  },
+  {
+    "name": "list_customer_orders",
+    "description": "List recent orders for a customer, by email.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "customer_email": { "type": "string" }
+      },
+      "required": ["customer_email"]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "order_id": { "type": "string" },
+              "order_date": { "type": "string" },
+              "status": { "type": "string" },
+              "total_usd": { "type": "number" }
+            }
+          }
+        }
+      }
+    }
+  }
+]

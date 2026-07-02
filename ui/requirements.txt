@@ -1,0 +1,6 @@
+# UI-only dependencies. Intentionally separate from app/beacon/pyproject.toml —
+# Streamlit is a demo/workshop concern, not something the deployed agent package
+# should ever import.
+streamlit>=1.38
+boto3>=1.34
+requests>=2.31

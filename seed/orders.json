@@ -1,0 +1,296 @@
+[
+  {
+    "order_id": "NW-10021",
+    "customer_email": "jane.doe@gmail.com",
+    "status": "delivered",
+    "carrier": "UPS",
+    "tracking_number": "1Z999AA10123456784",
+    "estimated_delivery": "2026-06-24",
+    "last_update": "2026-06-26",
+    "order_date": "2026-06-18",
+    "total_usd": 409.00,
+    "items": [
+      { "sku": "NW-JKT-101", "name": "Summit Shell Rain Jacket", "quantity": 1, "unit_price_usd": 189.00 },
+      { "sku": "NW-BAG-401", "name": "Trailhead 45L Backpack", "quantity": 1, "unit_price_usd": 220.00 }
+    ],
+    "shipping_address": "1420 Larimer St, Denver, CO 80202",
+    "delivered_at": "2026-06-26"
+  },
+  {
+    "order_id": "NW-10034",
+    "customer_email": "jane.doe@gmail.com",
+    "status": "delivered",
+    "carrier": "UPS",
+    "tracking_number": "1Z999AA10123456700",
+    "estimated_delivery": "2026-03-10",
+    "last_update": "2026-03-19",
+    "order_date": "2026-03-02",
+    "total_usd": 159.00,
+    "items": [
+      { "sku": "NW-SLP-501", "name": "Frostline 20°F Sleeping Bag", "quantity": 1, "unit_price_usd": 159.00 }
+    ],
+    "shipping_address": "1420 Larimer St, Denver, CO 80202",
+    "delivered_at": "2026-03-19"
+  },
+  {
+    "order_id": "NW-10042",
+    "customer_email": "marcus.reyes@gmail.com",
+    "status": "in_transit",
+    "carrier": "UPS",
+    "tracking_number": "1Z999AA10123456790",
+    "estimated_delivery": "2026-07-05",
+    "last_update": "2026-06-30",
+    "order_date": "2026-06-24",
+    "total_usd": 210.00,
+    "items": [
+      { "sku": "NW-BOOT-301", "name": "Trailblazer Mid Hiking Boots", "quantity": 1, "unit_price_usd": 145.00 },
+      { "sku": "NW-BASE-601", "name": "Merino Wool Base Layer Top", "quantity": 1, "unit_price_usd": 65.00 }
+    ],
+    "shipping_address": "800 Congress Ave, Austin, TX 78701"
+  },
+  {
+    "order_id": "NW-10058",
+    "customer_email": "marcus.reyes@gmail.com",
+    "status": "delivered",
+    "carrier": "FedEx",
+    "tracking_number": "794658135000",
+    "estimated_delivery": "2026-05-01",
+    "last_update": "2026-05-02",
+    "order_date": "2026-04-20",
+    "total_usd": 54.99,
+    "items": [
+      { "sku": "NW-STV-112", "name": "Compact Camp Stove", "quantity": 1, "unit_price_usd": 54.99 }
+    ],
+    "shipping_address": "800 Congress Ave, Austin, TX 78701",
+    "delivered_at": "2026-05-02",
+    "defective_or_wrong_item": true
+  },
+  {
+    "order_id": "NW-10067",
+    "customer_email": "emily.chen@yahoo.com",
+    "status": "delivered",
+    "carrier": "FedEx",
+    "tracking_number": "794658135011",
+    "estimated_delivery": "2026-06-09",
+    "last_update": "2026-06-11",
+    "order_date": "2026-06-01",
+    "total_usd": 438.98,
+    "items": [
+      { "sku": "NW-TNT-201", "name": "Alpine Ridge 2P Tent", "quantity": 1, "unit_price_usd": 349.00 },
+      { "sku": "NW-POLE-901", "name": "Carbon Trekking Poles (pair)", "quantity": 2, "unit_price_usd": 44.99 }
+    ],
+    "shipping_address": "500 Pine St, Seattle, WA 98101",
+    "delivered_at": "2026-06-11"
+  },
+  {
+    "order_id": "NW-10073",
+    "customer_email": "emily.chen@yahoo.com",
+    "status": "delivered",
+    "carrier": "USPS",
+    "tracking_number": "9400111899223197428490",
+    "estimated_delivery": "2026-06-19",
+    "last_update": "2026-06-21",
+    "order_date": "2026-06-12",
+    "total_usd": 94.97,
+    "items": [
+      { "sku": "NW-BTL-701", "name": "Glacier Steel Water Bottle", "quantity": 2, "unit_price_usd": 29.99 },
+      { "sku": "NW-LGT-801", "name": "Headlamp Pro 300", "quantity": 1, "unit_price_usd": 34.99 }
+    ],
+    "shipping_address": "500 Pine St, Seattle, WA 98101",
+    "delivered_at": "2026-06-21"
+  },
+  {
+    "order_id": "NW-10081",
+    "customer_email": "david.okafor@gmail.com",
+    "status": "delivered",
+    "carrier": "USPS",
+    "tracking_number": "9400111899223197428500",
+    "estimated_delivery": "2026-05-15",
+    "last_update": "2026-05-17",
+    "order_date": "2026-05-05",
+    "total_usd": 189.00,
+    "items": [
+      { "sku": "NW-JKT-101", "name": "Summit Shell Rain Jacket", "quantity": 1, "unit_price_usd": 189.00 }
+    ],
+    "shipping_address": "233 S Wacker Dr, Chicago, IL 60606",
+    "delivered_at": "2026-05-17"
+  },
+  {
+    "order_id": "NW-10088",
+    "customer_email": "david.okafor@gmail.com",
+    "status": "delivered",
+    "carrier": "UPS",
+    "tracking_number": "1Z999AA10123456810",
+    "estimated_delivery": "2026-06-26",
+    "last_update": "2026-06-28",
+    "order_date": "2026-06-20",
+    "total_usd": 42.99,
+    "items": [
+      { "sku": "NW-CLR-141", "name": "Trailrunner Shorts (Clearance)", "quantity": 1, "unit_price_usd": 24.99, "final_sale": true },
+      { "sku": "NW-SCK-131", "name": "Merino Hiking Socks 2-Pack", "quantity": 1, "unit_price_usd": 18.00 }
+    ],
+    "shipping_address": "233 S Wacker Dr, Chicago, IL 60606",
+    "delivered_at": "2026-06-28"
+  },
+  {
+    "order_id": "NW-10095",
+    "customer_email": "sarah.mitchell@outlook.com",
+    "status": "delivered",
+    "carrier": "FedEx",
+    "tracking_number": "794658135022",
+    "estimated_delivery": "2026-05-20",
+    "last_update": "2026-05-22",
+    "order_date": "2026-05-10",
+    "total_usd": 145.00,
+    "items": [
+      { "sku": "NW-BOOT-301", "name": "Trailblazer Mid Hiking Boots", "quantity": 1, "unit_price_usd": 145.00 }
+    ],
+    "shipping_address": "1550 Court Pl, Denver, CO 80202",
+    "delivered_at": "2026-05-22",
+    "defective_or_wrong_item": true
+  },
+  {
+    "order_id": "NW-10102",
+    "customer_email": "sarah.mitchell@outlook.com",
+    "status": "in_transit",
+    "carrier": "UPS",
+    "tracking_number": "1Z999AA10123456820",
+    "estimated_delivery": "2026-06-25",
+    "last_update": "2026-06-19",
+    "order_date": "2026-06-10",
+    "total_usd": 349.00,
+    "items": [
+      { "sku": "NW-TNT-201", "name": "Alpine Ridge 2P Tent", "quantity": 1, "unit_price_usd": 349.00 }
+    ],
+    "shipping_address": "1550 Court Pl, Denver, CO 80202"
+  },
+  {
+    "order_id": "NW-10110",
+    "customer_email": "tyler.brooks@gmail.com",
+    "status": "in_transit",
+    "carrier": "USPS",
+    "tracking_number": "9400111899223197428511",
+    "estimated_delivery": "2026-07-04",
+    "last_update": "2026-06-30",
+    "order_date": "2026-06-27",
+    "total_usd": 99.98,
+    "items": [
+      { "sku": "NW-STV-111", "name": "Camp Stove Deluxe", "quantity": 1, "unit_price_usd": 79.99 },
+      { "sku": "NW-FUEL-121", "name": "Fuel Canister 4-Pack", "quantity": 1, "unit_price_usd": 19.99 }
+    ],
+    "shipping_address": "1120 NW Couch St, Portland, OR 97209"
+  },
+  {
+    "order_id": "NW-10115",
+    "customer_email": "tyler.brooks@gmail.com",
+    "status": "processing",
+    "carrier": "",
+    "tracking_number": "",
+    "estimated_delivery": "2026-07-08",
+    "last_update": "2026-06-29",
+    "order_date": "2026-06-29",
+    "total_usd": 58.00,
+    "items": [
+      { "sku": "NW-BASE-602", "name": "Merino Wool Base Layer Bottom", "quantity": 1, "unit_price_usd": 58.00 }
+    ],
+    "shipping_address": "1120 NW Couch St, Portland, OR 97209"
+  },
+  {
+    "order_id": "NW-10121",
+    "customer_email": "priya.natarajan@gmail.com",
+    "status": "delivered",
+    "carrier": "OnTrac",
+    "tracking_number": "C11000000001234567",
+    "estimated_delivery": "2026-06-27",
+    "last_update": "2026-06-29",
+    "order_date": "2026-06-20",
+    "total_usd": 140.00,
+    "items": [
+      { "sku": "NW-BAG-402", "name": "Daypack 22L", "quantity": 1, "unit_price_usd": 95.00 },
+      { "sku": "NW-SUN-151", "name": "Polarized Sunglasses", "quantity": 1, "unit_price_usd": 45.00 }
+    ],
+    "shipping_address": "1 Ferry Building, San Francisco, CA 94111",
+    "delivered_at": "2026-06-29"
+  },
+  {
+    "order_id": "NW-10126",
+    "customer_email": "priya.natarajan@gmail.com",
+    "status": "cancelled",
+    "carrier": "",
+    "tracking_number": "",
+    "estimated_delivery": "",
+    "last_update": "2026-06-16",
+    "order_date": "2026-06-15",
+    "total_usd": 210.00,
+    "items": [
+      { "sku": "NW-JKT-103", "name": "Insulated Puffer Jacket", "quantity": 1, "unit_price_usd": 210.00 }
+    ],
+    "shipping_address": "1 Ferry Building, San Francisco, CA 94111"
+  },
+  {
+    "order_id": "NW-10133",
+    "customer_email": "hannah.summers@icloud.com",
+    "status": "delivered",
+    "carrier": "UPS",
+    "tracking_number": "1Z999AA10123456830",
+    "estimated_delivery": "2026-06-04",
+    "last_update": "2026-06-06",
+    "order_date": "2026-05-28",
+    "total_usd": 132.00,
+    "items": [
+      { "sku": "NW-BOOT-302", "name": "Women's Trail Running Shoes", "quantity": 1, "unit_price_usd": 110.00 },
+      { "sku": "NW-SCK-132", "name": "Compression Socks", "quantity": 1, "unit_price_usd": 22.00 }
+    ],
+    "shipping_address": "1770 13th St, Boulder, CO 80302",
+    "delivered_at": "2026-06-06"
+  },
+  {
+    "order_id": "NW-10140",
+    "customer_email": "hannah.summers@icloud.com",
+    "status": "delivered",
+    "carrier": "USPS",
+    "tracking_number": "9400111899223197428522",
+    "estimated_delivery": "2026-04-30",
+    "last_update": "2026-05-02",
+    "order_date": "2026-04-22",
+    "total_usd": 54.99,
+    "items": [
+      { "sku": "NW-STV-113", "name": "Backpacking Cookset", "quantity": 1, "unit_price_usd": 54.99 }
+    ],
+    "shipping_address": "1770 13th St, Boulder, CO 80302",
+    "delivered_at": "2026-05-02"
+  },
+  {
+    "order_id": "NW-10145",
+    "customer_email": "carlos.mendez@gmail.com",
+    "status": "delivered",
+    "carrier": "FedEx",
+    "tracking_number": "794658135033",
+    "estimated_delivery": "2026-06-26",
+    "last_update": "2026-06-28",
+    "order_date": "2026-06-19",
+    "total_usd": 37.98,
+    "items": [
+      { "sku": "NW-ACC-161", "name": "Backpack Rain Cover", "quantity": 1, "unit_price_usd": 24.99 },
+      { "sku": "NW-ACC-162", "name": "Insect Repellent Spray", "quantity": 1, "unit_price_usd": 12.99 }
+    ],
+    "shipping_address": "800 Brickell Ave, Miami, FL 33131",
+    "delivered_at": "2026-06-28"
+  },
+  {
+    "order_id": "NW-10151",
+    "customer_email": "olivia.park@gmail.com",
+    "status": "delivered",
+    "carrier": "FedEx",
+    "tracking_number": "794658135044",
+    "estimated_delivery": "2026-06-21",
+    "last_update": "2026-06-23",
+    "order_date": "2026-06-14",
+    "total_usd": 199.00,
+    "items": [
+      { "sku": "NW-JKT-102", "name": "Women's Summit Shell Jacket", "quantity": 1, "unit_price_usd": 199.00 }
+    ],
+    "shipping_address": "111 S Main St, Salt Lake City, UT 84111",
+    "delivered_at": "2026-06-23"
+  }
+]

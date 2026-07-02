@@ -1,63 +1,121 @@
 {
   "$schema": "https://schema.agentcore.aws.dev/v1/agentcore.json",
-  "name": "SupportAgent",
+  "name": "BeaconSupport",
   "version": 1,
   "managedBy": "CDK",
   "tags": {
     "agentcore:created-by": "agentcore-cli",
-    "agentcore:project-name": "SupportAgent"
+    "agentcore:project-name": "BeaconSupport"
   },
   "runtimes": [
     {
-      "name": "Support",
+      "name": "Beacon",
       "build": "CodeZip",
       "entrypoint": "main.py",
-      "codeLocation": "app/Support/",
+      "codeLocation": "app/beacon/",
       "runtimeVersion": "PYTHON_3_14",
       "networkMode": "PUBLIC",
-      "protocol": "HTTP"
+      "protocol": "HTTP",
+      "authorizerType": "CUSTOM_JWT",
+      "authorizerConfiguration": {
+        "customJwtAuthorizer": {
+          "discoveryUrl": "https://auth.northwind-outfitters.example.com/.well-known/openid-configuration",
+          "allowedAudience": ["beacon-support"],
+          "allowedClients": ["beacon-web-app"]
+        }
+      }
     }
   ],
   "memories": [
     {
-      "name": "SupportMemory",
+      "name": "BeaconMemory",
       "eventExpiryDuration": 30,
       "strategies": [
         {
           "type": "SEMANTIC",
+          "name": "CustomerFacts",
+          "description": "Order numbers, product issues, and other facts recalled across sessions",
           "namespaceTemplates": [
-            "/users/{actorId}/facts"
+            "/support/{actorId}/semantic"
           ]
         },
         {
           "type": "USER_PREFERENCE",
+          "name": "CustomerPreferences",
+          "description": "Tone, communication style, and prior complaint history",
           "namespaceTemplates": [
-            "/users/{actorId}/preferences"
+            "/support/{actorId}/preferences"
           ]
         },
         {
           "type": "SUMMARIZATION",
+          "name": "HandoffSummary",
+          "description": "Session recap used when escalating to a human agent",
           "namespaceTemplates": [
-            "/summaries/{actorId}/{sessionId}"
+            "/support/{actorId}/{sessionId}/summary"
           ]
         },
         {
           "type": "EPISODIC",
+          "name": "TriageEpisodes",
+          "description": "Past triage episodes (known-issue matches, escalations) for reflection across sessions",
           "namespaceTemplates": [
-            "/episodes/{actorId}/{sessionId}"
+            "/support/{actorId}/episodes/{sessionId}"
           ],
           "reflectionNamespaceTemplates": [
-            "/episodes/{actorId}"
+            "/support/{actorId}/episodes"
           ]
         }
       ]
     }
   ],
   "knowledgeBases": [],
-  "credentials": [],
+  "credentials": [
+    {
+      "authorizerType": "OAuthCredentialProvider",
+      "name": "CarrierApiOAuth",
+      "discoveryUrl": "https://auth.carrier-status.example.com/.well-known/openid-configuration",
+      "scopes": [
+        "carrier.read"
+      ],
+      "vendor": "CustomOauth2"
+    }
+  ],
   "evaluators": [],
   "onlineEvalConfigs": [],
-  "agentCoreGateways": [],
+  "agentCoreGateways": [
+    {
+      "name": "BeaconGateway",
+      "protocolType": "MCP",
+      "description": "Order/refund lookups (Lambda) and shipping-carrier API (OpenAPI)",
+      "targets": [
+        {
+          "name": "OrderRefundLookup",
+          "targetType": "lambdaFunctionArn",
+          "lambdaFunctionArn": {
+            "lambdaArn": "arn:aws:lambda:us-west-2:123456789012:function:beacon-order-lambda",
+            "toolSchemaFile": "gateway/order_lambda/tool-schema.json"
+          }
+        },
+        {
+          "name": "CarrierStatusApi",
+          "targetType": "openApiSchema",
+          "outboundAuth": {
+            "type": "OAUTH",
+            "credentialName": "CarrierApiOAuth"
+          },
+          "schemaSource": {
+            "inline": {
+              "path": "gateway/carrier_openapi.json"
+            }
+          }
+        }
+      ],
+      "authorizerType": "NONE",
+      "enableSemanticSearch": true,
+      "exceptionLevel": "NONE"
+    }
+  ],
   "policyEngines": [],
   "configBundles": [],
   "abTests": [],

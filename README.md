@@ -21,8 +21,7 @@ companion piece: same production rigor as Atlas and StockPilot, but the provisio
 manage — the mock order database and its Lambda.
 
 > A detailed architectural write-up will go up on my blog at
-> [Beacon](http://oussamabenlagha.de/beacon-support-agentcore.html) — not published yet; treat
-> that link as a placeholder.
+> [Beacon](http://oussamabenlagha.de/beacon-support-agentcore.html)
 
 ## What you'll build
 
@@ -36,19 +35,27 @@ manage — the mock order database and its Lambda.
 | 8 | Sandboxed refund math | Code Interpreter | `app/beacon/tools/refund_calculator.py` | IAM only (see Deploy) |
 | 9 | Live carrier-delay lookup on a real website | Browser tool | `app/beacon/tools/carrier_lookup.py` | IAM only (see Deploy) |
 | 10 | Order/refund backend as MCP tools | Gateway + Lambda target | `gateway/order_lambda/` | `agentcore add gateway-target --type lambda-function-arn` |
-| 11 | Shipping-carrier REST API as MCP tools | Gateway + OpenAPI target | `gateway/carrier_openapi.json` | `agentcore add gateway-target --type open-api-schema` |
+| 11 | Gateway OpenAPI target (carrier API schema) | `gateway/carrier_openapi.json` (reference) | — | requires a live OAuth provider — see note below |
 | 12 | Tool-set semantic search | Gateway semantic search | — | automatic once a gateway has enough tools |
-| 13 | Inbound auth (verified customers only) | Identity — CUSTOM_JWT | `agentcore/agentcore.json` runtime config | hand-edited (see note below) |
-| 14 | Outbound auth to the carrier API | Identity — OAuth | `gateway/carrier_openapi.json` outbound-auth | `agentcore add gateway-target --outbound-auth oauth` |
-| 15 | Streaming responses | Runtime SSE | `main.py`'s `stream_async` loop | — |
-| 16 | Session isolation / HealthyBusy status | Runtime sessions + `/ping` | `main.py`, `tools/warehouse_check.py` | — |
-| 17 | Async long-running task | `@app.async_task` | `app/beacon/tools/warehouse_check.py` | — |
-| 18 | Full tracing / dashboards | Observability (OTEL → CloudWatch) | automatic once deployed | — |
+| 13 | Inbound auth | Runtime — `AWS_IAM` (SigV4) | `agentcore/agentcore.json` runtime config | `agentcore create` |
+| 14 | Streaming responses | Runtime SSE | `main.py`'s `stream_async` loop | — |
+| 15 | Session isolation / HealthyBusy status | Runtime sessions + `/ping` | `main.py`, `tools/warehouse_check.py` | — |
+| 16 | Async long-running task | `@app.async_task` | `app/beacon/tools/warehouse_check.py` | — |
+| 17 | Full tracing / dashboards | Observability (OTEL → CloudWatch) | automatic once deployed | — |
 
-Row 13's `authorizerConfiguration` isn't a flag on `agentcore add agent` for an *existing* runtime
-(only at creation time) — it's hand-edited into `agentcore/agentcore.json`, confirmed valid with
-`agentcore validate`. Everything else in this table is provisioned by the CLI or is plain
-application code; see "Deploy" below for the one exception (Code Interpreter/Browser IAM).
+**Row 11 note.** `gateway/carrier_openapi.json` is included as a reference schema. AgentCore
+requires OpenAPI gateway targets to have outbound auth (OAuth or API key), and the CarrierApiOAuth
+credential in this workshop points to a placeholder OIDC discovery URL that doesn't exist. Wiring
+up a real OAuth provider (e.g. Cognito) is left as an extension exercise; once you have one, add
+the credential with `agentcore add credential --type oauth` and re-add the target with
+`--outbound-auth oauth --credential-name <name>`. The carrier delay lookup used in the workshop
+goes through the Browser tool instead (scrapes public UPS/FedEx/USPS pages directly — no OAuth
+needed).
+
+**Row 13 note.** The runtime uses `AWS_IAM` (SigV4) for inbound auth — straightforward for the
+workshop and what the Streamlit UI's "Deployed IAM" mode signs with. Switching to `CUSTOM_JWT`
+requires a live OIDC provider; BedrockAgentCore fetches the discovery document at deploy time and
+fails with `UnknownHostException` if the URL doesn't resolve.
 
 ## Architecture
 
@@ -70,13 +77,12 @@ application code; see "Deploy" below for the one exception (Code Interpreter/Bro
                     │              check)              │
                     ▼                   ▼               ▼
            ┌─────────────────────────────────────────────────┐
-           │                  BeaconGateway (MCP)               │
-           │  OrderRefundLookup (Lambda)  ·  CarrierStatusApi   │
-           │           (OpenAPI, outbound OAuth)                │
+           │              BeaconGateway (MCP)                │
+           │          OrderRefundLookup (Lambda)             │
            └───────────────────┬─────────────────────────────┘
                                 ▼
                     DynamoDB (mock order DB, bin/)
-                    + real carrier tracking website (Browser)
+                    + real carrier tracking website (Browser tool)
 
            BeaconMemory: SEMANTIC · USER_PREFERENCE · SUMMARIZATION · EPISODIC
                                 │
@@ -229,10 +235,6 @@ are:
 
 Add that as an inline policy on the Runtime's execution role (find it via `agentcore status` or
 the CloudFormation stack output) after your first `agentcore deploy`.
-
-Row 13's CUSTOM_JWT inbound auth only takes effect on the deployed Runtime — `agentcore dev`
-doesn't enforce it locally. Invoking a deployed Beacon directly (outside `agentcore invoke`, which
-signs for you) needs `--bearer-token <token>` from your identity provider, not SigV4.
 
 ## Observability
 

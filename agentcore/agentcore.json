@@ -16,14 +16,7 @@
       "runtimeVersion": "PYTHON_3_14",
       "networkMode": "PUBLIC",
       "protocol": "HTTP",
-      "authorizerType": "CUSTOM_JWT",
-      "authorizerConfiguration": {
-        "customJwtAuthorizer": {
-          "discoveryUrl": "https://auth.northwind-outfitters.example.com/.well-known/openid-configuration",
-          "allowedAudience": ["beacon-support"],
-          "allowedClients": ["beacon-web-app"]
-        }
-      }
+      "authorizerType": "AWS_IAM"
     }
   ],
   "memories": [
@@ -70,24 +63,14 @@
     }
   ],
   "knowledgeBases": [],
-  "credentials": [
-    {
-      "authorizerType": "OAuthCredentialProvider",
-      "name": "CarrierApiOAuth",
-      "discoveryUrl": "https://auth.carrier-status.example.com/.well-known/openid-configuration",
-      "scopes": [
-        "carrier.read"
-      ],
-      "vendor": "CustomOauth2"
-    }
-  ],
+  "credentials": [],
   "evaluators": [],
   "onlineEvalConfigs": [],
   "agentCoreGateways": [
     {
       "name": "BeaconGateway",
       "protocolType": "MCP",
-      "description": "Order/refund lookups (Lambda) and shipping-carrier API (OpenAPI)",
+      "description": "Order/refund lookups via Lambda",
       "targets": [
         {
           "name": "OrderRefundLookup",
@@ -95,19 +78,6 @@
           "lambdaFunctionArn": {
             "lambdaArn": "arn:aws:lambda:us-west-2:123456789012:function:beacon-order-lambda",
             "toolSchemaFile": "gateway/order_lambda/tool-schema.json"
-          }
-        },
-        {
-          "name": "CarrierStatusApi",
-          "targetType": "openApiSchema",
-          "outboundAuth": {
-            "type": "OAUTH",
-            "credentialName": "CarrierApiOAuth"
-          },
-          "schemaSource": {
-            "inline": {
-              "path": "gateway/carrier_openapi.json"
-            }
           }
         }
       ],
